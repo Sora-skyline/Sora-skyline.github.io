@@ -1,8 +1,10 @@
-name: CI #自动化的名称
+name: github pages #自动化的名称
 on:
   push: # push的时候触发
     branches: # 那些分支需要触发
       - main
+  pull_request:
+    
 jobs:
   build:
     runs-on: ubuntu-latest # 镜像市场
@@ -20,8 +22,7 @@ jobs:
         run: hugo -D
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
         with:
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          EXTERNAL_REPOSITORY: Sora-skyline/Sora-skyline.github.io # 注意要修改本处地址
-          PUBLISH_BRANCH: master
-          PUBLISH_DIR: ./public
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
